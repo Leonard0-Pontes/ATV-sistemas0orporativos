@@ -1,5 +1,7 @@
-import { BadRequestException, Controller, Get,  Post, Query, Param, Body, Patch, Delete } from "@nestjs/common";
+import { BadRequestException, Controller, Get,  Post, Query, Param, Body, Patch, Delete, ParseIntPipe, DefaultValuePipe } from "@nestjs/common";
 import {TarefasService} from "./tarefas.service";
+import { CreateTarefaDto } from "./dto/create-tarefa.dto";
+import { UpdateTarefaDto } from "./dto/update-tarefa.dto";
 
 @Controller('tarefas')
 export class TarefasController {
@@ -8,71 +10,40 @@ export class TarefasController {
     @Get()
     listar(
         @Query('status') status?: string,
-        @Query('prioridade') prioridade?: string,
+        @Query('prioridade', new DefaultValuePipe(5), ParseIntPipe) 
+            prioridadeMaxima?: number,
     ){
-        return this.tarefasService.listar(status, prioridade);
+        return this.tarefasService.listar(status, prioridadeMaxima);
     }
 
     @Get(':id')
-    buscarPorId(@Param('id') id: string){
-        const idNumero = Number(id);
-
-        if(Number.isNaN(idNumero)){
-            throw new BadRequestException('ID deve ser um número');
-        }
-
-        return this.tarefasService.buscarPorId(idNumero);
+    buscarPorId(@Param('id', ParseIntPipe) id: number){
+        
+        return this.tarefasService.buscarPorId(id);
     }
 
     @Post()
     criar(
-        @Body()
-        body:{
-            titulo: string;
-            descricao: string;
-            status: 'aberta' | 'em_andamento' | 'concluida';
-            prioridade: 'baixa' | 'media' | 'alta';
-        }
+        @Body() body: CreateTarefaDto
     ){
-        if(!body.titulo || !body.descricao || !body.status || !body.prioridade){
-            throw new BadRequestException('Todos os campos são obrigatórios');
-        }
-
-        return this.tarefasService.criar(body);
+    
+        //return this.tarefasService.criar(body);
     }
 
     @Patch(':id')
     atualizarParcial(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body()
-        body:{
-            titulo?: string;
-            descricao?: string;
-            status?: 'aberta' | 'em_andamento' | 'concluida';
-            prioridade?: 'baixa' | 'media' | 'alta';
-        }
+        body: UpdateTarefaDto
     ){
-        const idNumero = Number(id);
+       
 
-        if(Number.isNaN(idNumero)){
-            return new BadRequestException('ID deve ser um número');
-        }
-
-        if(Object.keys(body).length === 0){
-            throw new BadRequestException('Pelo menos um campo deve ser fornecido para atualização');
-        }
-
-        return this.tarefasService.atualizarParcial(idNumero, body);
+        return this.tarefasService.atualizarParcial(id, body);
     }   
 
     @Delete(':id')
-    remover(@Param('id') id: string){
-        const idNumero = Number(id);
-
-        if(Number.isNaN(idNumero)){
-            throw new BadRequestException('ID deve ser um número');
-        }
-
-        return this.tarefasService.remover(idNumero);
+    remover(@Param('id', ParseIntPipe) id: number){
+        
+        return this.tarefasService.remover(id);
     }
 }

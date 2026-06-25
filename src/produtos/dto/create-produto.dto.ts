@@ -1,7 +1,7 @@
 import { IsBoolean, Min, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateProdutoDto {
-  
+    
   @IsString()
   @IsNotEmpty()
   nome!: string;

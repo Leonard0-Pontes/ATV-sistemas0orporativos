@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateProdutoDto } from './dto/create-produto.dto';
+import { UpdateProdutoDto } from './dto/update-produto.dto';
 
 type Produto = {
     id: number;
@@ -23,8 +25,18 @@ export class ProdutosService {
         return this.produtos;
     }
     
-    listarPorCategoria(categoria: string){
-        return this.produtos.filter((p) => p.categoria === categoria);
+    listarPorCategoria(categoria: string, limite?: number){
+        let resultado = [...this.produtos];
+
+        if(categoria){
+            resultado = resultado.filter((p) => p.categoria === categoria);
+        }
+
+        if(limite && limite > 0){
+            resultado = resultado.slice(0, limite);
+        }
+
+        return resultado;
     }
 
     buscarPorId(id: number){
@@ -33,7 +45,7 @@ export class ProdutosService {
         return produto;
     }
 
-    criar(dados: Omit<Produto, 'id'>) {
+    criar(dados: CreateProdutoDto){ 
         const novoId = 
             this.produtos.length > 0 
                 ? Math.max(...this.produtos.map((p) => p.id)) + 1
@@ -45,7 +57,7 @@ export class ProdutosService {
         return novoProduto;
     }
 
-    atualizarCompleto(id: number, dados: Omit<Produto, 'id'>) {
+    atualizarCompleto(id: number, dados: CreateProdutoDto) {
         const indice = this.produtos.findIndex((p) => p.id === id);
 
         if(indice === -1){
@@ -58,7 +70,7 @@ export class ProdutosService {
         return atualizado;
     }
 
-    atualizarParcial(id: number, dados: Partial<Omit<Produto, 'id'>>) {
+    atualizarParcial(id: number, dados: UpdateProdutoDto) {
         const produto = this.buscarPorId(id);
         
         if(!produto){

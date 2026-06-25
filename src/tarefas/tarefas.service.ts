@@ -5,7 +5,7 @@ type Tarefa = {
     titulo: string;
     descricao: string;
     status: 'aberta' | 'em_andamento' | 'concluida';
-    prioridade: 'baixa' | 'media' | 'alta';
+    prioridade: number;
 }
 
 @Injectable()
@@ -16,40 +16,40 @@ export class TarefasService {
             titulo: 'Configurar projeto',
             descricao: 'Instalar dependencias e validar o NestJS',
             status: 'concluida',
-            prioridade: 'alta',
+            prioridade: 5,
         },
         {
             id: 2,
             titulo: 'Criar modulo tarefas',
             descricao: 'Gerar module, controller e service',
             status: 'em_andamento',
-            prioridade: 'alta',
+            prioridade: 5,
         },
         {
             id: 3,
             titulo: 'Implementar listagem',
             descricao: 'Criar rota GET /tarefas',
             status: 'aberta',
-            prioridade: 'media',
+            prioridade: 3,
         },
         {
             id: 4,
             titulo: 'Testar no Thunder Client',
             descricao: 'Salvar requests da pratica',
             status: 'aberta',
-            prioridade: 'baixa',
+            prioridade: 1,
         },
     ];
 
-    listar(status?: string, prioridade?: string){
+    listar(status?: string, prioridadeMaxima?: number){
         let resultado = [...this.tarefas];
 
         if(status){
             resultado = resultado.filter(t => t.status === status);
         }
 
-        if(prioridade){
-            resultado = resultado.filter(t => t.prioridade === prioridade);
+        if(prioridadeMaxima !== undefined){
+            resultado = resultado.filter(t => t.prioridade <= prioridadeMaxima);
         }
 
         return resultado;
