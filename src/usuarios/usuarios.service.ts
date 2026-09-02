@@ -37,7 +37,6 @@ export class UsuariosService {
     id: 3,
     nome: 'leonardo pontes',
     email: 'leonardo.pontes@escolar.ifrn.com',
-    //2025103806005
     senhaHash:
       '$2b$12$zqjInxEzlLTqQCZs2DJDo.EiJItxD8A8GT4xA63fkjsaWsiFo6s8e',
     papel: 'gestor',
@@ -46,11 +45,10 @@ export class UsuariosService {
     {
     id: 4,
     nome: 'leonardo pontes',
-    email: 'leonardo.pontes@escolar.ifrn.com',
-    // 50006083015202
+    email: 'leonardo.pontes@escolar.ifrn..edu.com',
     senhaHash:
       '$2b$12$dYtU26UsxRIl6hWjOWLDZOSxshsxgX.PP.8vXYL1.wDdSSwCLhNaa',
-    papel: 'gestor',
+    papel: 'auditor',
     ativo: true,
     },
   ];
