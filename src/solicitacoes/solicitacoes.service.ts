@@ -24,6 +24,22 @@ export class SolicitacoesService {
     return solicitacao;
   }
 
+  relatorio() {
+  const porStatus = this.solicitacoes.reduce(
+    (resultado, solicitacao) => {
+      resultado[solicitacao.status] =
+        (resultado[solicitacao.status] ?? 0) + 1;
+
+      return resultado;
+    },
+    {} as Record<StatusSolicitacao, number>,
+  );
+
+  return {
+    total: this.solicitacoes.length,
+    porStatus,
+  };
+  }
   aprovar(id: number) {
     const solicitacao = this.buscarPorId(id);
     solicitacao.status = 'aprovada';

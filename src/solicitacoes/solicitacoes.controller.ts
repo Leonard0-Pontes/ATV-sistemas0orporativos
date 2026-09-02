@@ -8,6 +8,12 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class SolicitacoesController {
   constructor(private readonly solicitacoesService: SolicitacoesService) { }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('gestor', 'auditor')
+  @Get('relatorio')
+  relatorio() {
+    return this.solicitacoesService.relatorio();
+  }
   @Get(':id')
   buscarPorId(@Param('id', ParseIntPipe) id: number) {
     return this.solicitacoesService.buscarPorId(id);
